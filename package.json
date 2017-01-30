@@ -1,0 +1,19 @@
+{
+  "name": "pollr",
+  "version": "1.0.0",
+  "description": "Polling app",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rcwestlake/pollr.git"
+  },
+  "author": "Ryan C Westlake",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rcwestlake/pollr/issues"
+  },
+  "homepage": "https://github.com/rcwestlake/pollr#readme"
+}
