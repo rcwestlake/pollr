@@ -2,7 +2,7 @@
   "name": "pollr",
   "version": "1.0.0",
   "description": "Polling app",
-  "main": "index.html",
+  "main": "public/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/rcwestlake/pollr/issues"
   },
-  "homepage": "https://github.com/rcwestlake/pollr#readme"
+  "homepage": "https://github.com/rcwestlake/pollr#readme",
+  "dependencies": {
+    "connect-ensure-login": "^0.1.1",
+    "passport": "^0.3.2",
+    "passport-auth0": "^0.6.0"
+  }
 }
