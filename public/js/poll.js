@@ -1,3 +1,5 @@
+const socket = io()
+
 const pollQuestion = $('#poll-question')
 const pollOptions = $('#poll-options')
 

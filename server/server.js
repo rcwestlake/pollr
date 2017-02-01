@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const http = require('http')
 const path = require('path')
 const bodyParser = require('body-parser')
 const shortid = require('shortid')
@@ -49,8 +50,6 @@ app.post('/polls', (req, res) => {
 
 app.get('/api/polls/:uid', (req, res) => {
   const { uid } = req.params
-  console.log('param uid', uid)
-
   const result = app.locals.polls.filter(poll => poll.uid == uid)[0]
 
   res.status(200).json(result)
@@ -79,6 +78,17 @@ app.get('*', (req, res) => {
   res.send('page not found - try again')
 })
 
-app.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}`);
+
+const server = http.createServer(app)
+                 .listen(app.get('port'), () => {
+                    console.log(`Pollr listening on port ${app.get('port')}.`)
+                  })
+
+/* Websockets */
+
+var socketIo = require('http').createServer(app);
+var io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+  console.log('A user has connected');
 })
