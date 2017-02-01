@@ -5,11 +5,22 @@ const bodyParser = require('body-parser')
 const shortid = require('shortid')
 require('dotenv').config()
 
-app.use(express.static('public')) //if you need static files, change this path
+app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.locals.polls = []
+app.locals.polls = [
+  {
+    uid: 'HyuueskOe',
+    question: 'dinner?',
+    options: ['burger', 'salad', 'pizza', 'tacos']
+  },
+  {
+    uid: 'ye03830a3',
+    question: 'bball?',
+    options: ['basketball', 'golf', 'football', 'soccer']
+  }
+]
 app.locals.users = []
 
 app.set('port', process.env.PORT || 1111)
@@ -36,17 +47,21 @@ app.post('/polls', (req, res) => {
   res.status(200).json({ uid, question, options })
 })
 
+app.get('/api/polls/:uid', (req, res) => {
+  const { uid } = req.params
+  console.log('param uid', uid)
+
+  const result = app.locals.polls.filter(poll => poll.uid == uid)[0]
+
+  res.status(200).json(result)
+})
+
 app.get('/polls/:uid', (req, res) => {
   const { uid } = req.params
 
   const poll = app.locals.polls.filter(poll => poll.uid == uid)[0]
-  res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'), poll);
-  // res.status(200).json({ poll })
+  res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
 })
-
-// app.get('/poll', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
-// })
 
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/screens', 'login.html'));
