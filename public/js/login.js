@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+  var lock = new Auth0Lock('hiddenID', 'hiddenDomain', {
     auth: {
       params: {
         scope: 'openid email'
@@ -43,11 +43,19 @@ $(document).ready(function() {
     }
   };
 
+  function sendProfileToServer(profile) {
+    axios.post('/login', {profile: profile})
+    .then(function(response) {
+      console.log(response);
+    })
+  }
+
   var show_profile_info = function(profile) {
      $('.nickname').text(profile.nickname);
      $('.btn-login').hide();
      $('.avatar').attr('src', profile.picture).show();
      $('.btn-logout').show();
+    sendProfileToServer(profile)
   };
 
   var logout = function() {
