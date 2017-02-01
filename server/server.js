@@ -33,8 +33,13 @@ app.get('/polls/:uid', (req, res) => {
   const { uid } = req.params
 
   const poll = app.locals.polls.filter(poll => poll.uid == uid)[0]
-  res.status(200).json({ poll })
+  res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'), poll);
+  // res.status(200).json({ poll })
 })
+
+// app.get('/poll', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
+// })
 
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/screens', 'login.html'));

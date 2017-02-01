@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var lock = new Auth0Lock('4WsKgHxxXlPw8fFt3fGIDTuzYCeGxD0C', 'rcwestlake.auth0.com', {
+  var lock = new Auth0Lock('HIDDENID', 'HIDDENDOMAIN', {
     auth: {
       params: {
         scope: 'openid email'
