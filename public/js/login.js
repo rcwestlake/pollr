@@ -1,5 +1,12 @@
 $(document).ready(function() {
-  var lock = new Auth0Lock('hiddenID', 'hiddenDomain', {
+  axios.get('/authkeys')
+  .then(response => {
+    doAuth(response)
+  })
+});
+
+const doAuth = (response) => {
+  var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
     auth: {
       params: {
         scope: 'openid email'
@@ -20,7 +27,6 @@ $(document).ready(function() {
   lock.on("authenticated", function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
-        // Handle error
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
@@ -46,7 +52,7 @@ $(document).ready(function() {
   function sendProfileToServer(profile) {
     axios.post('/login', {profile: profile})
     .then(function(response) {
-      console.log(response);
+      console.log('server response', response);
     })
   }
 
@@ -55,7 +61,7 @@ $(document).ready(function() {
      $('.btn-login').hide();
      $('.avatar').attr('src', profile.picture).show();
      $('.btn-logout').show();
-    sendProfileToServer(profile)
+     sendProfileToServer(profile)
   };
 
   var logout = function() {
@@ -64,4 +70,4 @@ $(document).ready(function() {
   };
 
   retrieve_profile();
-});
+}
