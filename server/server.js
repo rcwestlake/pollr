@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const bodyParser = require('body-parser')
 const shortid = require('shortid')
+require('dotenv').config()
 
 app.use(express.static('public')) //if you need static files, change this path
 app.use(bodyParser.json())
@@ -16,6 +17,12 @@ app.locals.title = 'Pollr' //change title if necessary
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/screens', 'home.html'));
+})
+
+app.get('/authkeys', (req, res) => {
+  authId = process.env.AUTH0_CLIENT_ID
+  authDomain = process.env.AUTH0_DOMAIN
+  res.status(200).json({authId, authDomain})
 })
 
 app.get('/polls', (req, res) => {

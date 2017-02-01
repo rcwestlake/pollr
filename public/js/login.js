@@ -1,5 +1,12 @@
 $(document).ready(function() {
-  var lock = new Auth0Lock('HIDDENID', 'HIDDENDOMAIN', {
+  axios.get('/authkeys')
+  .then(response => {
+    doAuth(response)
+  })
+});
+
+const doAuth = (response) => {
+  var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
     auth: {
       params: {
         scope: 'openid email'
@@ -63,4 +70,4 @@ $(document).ready(function() {
   };
 
   retrieve_profile();
-});
+}
