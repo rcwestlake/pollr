@@ -23,5 +23,6 @@ const sendPollToServer = (question, options) => {
 
 const appendLinkToPage = (response) => {
   console.log('uid', response.uid);
-  $('#link').html(`<a href='/${response.uid}'>Click to share link!</a>`)
+  $('.link-intro').css('display', 'block')
+  $('#link').html(`<a href='polls/${response.uid}'>Click to share link!</a>`)
 }
