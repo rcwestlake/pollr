@@ -90,5 +90,14 @@ var socketIo = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
-  console.log('A user has connected');
+  console.log('A user has connected', io.engine.clientsCount);
+  io.sockets.emit('usersConnected', io.engine.clientsCount)
+
+  socket.on('userVote', () => {
+    socket.emit('voteMessage', 'You voted!')
+  })
+
+  socket.on('disconnect', () => {
+    console.log('A user has disconnected', io.engine.clientsCount);
+  })
 })

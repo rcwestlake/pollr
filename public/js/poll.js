@@ -2,6 +2,8 @@ const socket = io()
 
 const pollQuestion = $('#poll-question')
 const pollOptions = $('#poll-options')
+const connectionCount = $('#connection-count')
+const voteMessage = $('#vote-message')
 
 $(document).ready(function() {
   let pollData;
@@ -14,6 +16,14 @@ $(document).ready(function() {
       appendPollToDom(pollData)
     })
   }
+
+  socket.on('usersConnected', (count) => {
+    connectionCount.text('# of connected users: ' + count)
+  })
+
+  socket.on('voteMessage', (message) => {
+    voteMessage.text(message)
+  })
 })
 
 const appendPollToDom = (poll) => {
@@ -23,6 +33,10 @@ const appendPollToDom = (poll) => {
 
   pollQuestion.text(poll.question)
   poll.options.map(option => {
-    pollOptions.append(`<li>${option}</li>`)
+    pollOptions.append(`<li class='option'>${option}</li>`)
+  })
+  $('.option').on('click', function() {
+    socket.emit('userVote', this.innerText)
+    console.log(this);
   })
 }
