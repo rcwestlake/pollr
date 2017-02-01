@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var lock = new Auth0Lock('hiddenID', 'hiddenDomain', {
+  var lock = new Auth0Lock('4WsKgHxxXlPw8fFt3fGIDTuzYCeGxD0C', 'rcwestlake.auth0.com', {
     auth: {
       params: {
         scope: 'openid email'
@@ -20,7 +20,6 @@ $(document).ready(function() {
   lock.on("authenticated", function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
-        // Handle error
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
@@ -46,7 +45,7 @@ $(document).ready(function() {
   function sendProfileToServer(profile) {
     axios.post('/login', {profile: profile})
     .then(function(response) {
-      console.log(response);
+      console.log('server response', response);
     })
   }
 
@@ -55,7 +54,7 @@ $(document).ready(function() {
      $('.btn-login').hide();
      $('.avatar').attr('src', profile.picture).show();
      $('.btn-logout').show();
-    sendProfileToServer(profile)
+     sendProfileToServer(profile)
   };
 
   var logout = function() {
