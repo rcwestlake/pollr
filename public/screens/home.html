@@ -4,15 +4,24 @@
     <meta charset="utf-8">
     <title>Pollr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/reset.css"></link>
     <link rel="stylesheet" href="../css/home.css"></link>
   </head>
   <body>
     <header>
       <h1>Pollr</h1>
-      <p>Simple and easy</p>
+      <p id="tagline">
+        Easy polls/surveys. Simply enter your question and add answer options. After submitting, a link will appear, which you can then share with the world.
+      </p>
     </header>
-    <form>
-      <input id="question" type="text" placeholder="Enter your question" />
+    <form id="create-poll-container">
+      <input
+        id="question"
+        type="text"
+        placeholder="Enter your question"
+        autofocus
+      />
+      <h3>Give em' options</h3>
       <input class="option" type="text" placeholder="Option 1" />
       <input class="option" type="text" placeholder="Option 2" />
       <input class="option" type="text" placeholder="Option 3" />
