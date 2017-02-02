@@ -4,27 +4,51 @@
     <meta charset="utf-8">
     <title>Pollr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/reset.css"></link>
     <link rel="stylesheet" href="../css/home.css"></link>
   </head>
   <body>
     <header>
       <h1>Pollr</h1>
-      <p>Simple and easy</p>
+      <div id="tagline">
+        <p>
+          Easy polls/surveys. Simply enter your question and add answer options.
+        </p>
+        <p>
+          After submitting, a link will appear, which you can then share with the world.
+        </p>
+      </div>
     </header>
-    <form>
-      <input id="question" type="text" placeholder="Enter your question" />
-      <input class="option" type="text" placeholder="Option 1" />
-      <input class="option" type="text" placeholder="Option 2" />
-      <input class="option" type="text" placeholder="Option 3" />
-      <input class="option" type="text" placeholder="Option 4" />
-      <button id="submit-poll-btn" class="">Create Poll</button>
-    </form>
+
+    <section id="form-container">
+      <form id="create-poll-container">
+        <div id="question-container">
+          <h3>Enter your question</h3>
+          <input
+            id="question"
+            placeholder="Enter your question"
+            autofocus
+          />
+        </div>
+        <div id="options-container">
+          <h3>Enter options</h3>
+          <input class="option" type="text" placeholder="Option 1" />
+          <input class="option" type="text" placeholder="Option 2" />
+          <input class="option" type="text" placeholder="Option 3" />
+          <input class="option" type="text" placeholder="Option 4" />
+        </div>
+        <button id="submit-poll-btn" class="">Create Poll</button>
+      </form>
+    </section>
 
     <section id="link-container">
-      <h3 class="link-intro">
-        Good news! Here's the link to your poll.
-      </h3>
-      <p id="link"></p>
+      <div class="link-text">
+        <h3 class="link-intro">
+          Good news! Here's the link to your poll.
+        </h3>
+        <p id="link"></p>
+        <button id="back-to-poll-btn">Back to poll</button>
+      </div>
     </section>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
