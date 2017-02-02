@@ -157,8 +157,12 @@ io.on('connection', (socket) => {
   console.log('A user has connected', io.engine.clientsCount);
   io.sockets.emit('usersConnected', io.engine.clientsCount)
 
-  socket.on('userVote', () => {
-    socket.emit('voteMessage', 'You voted!')
+  socket.on('userVote', (id, name) => {
+    //thing that was clicked on
+    //who clicked on it
+    //send it to everyone
+    socket.emit('userMessage', 'You voted!')
+    io.sockets.emit('voteMessage', id, 'Click on by' + name)
   })
 
   socket.on('disconnect', () => {
