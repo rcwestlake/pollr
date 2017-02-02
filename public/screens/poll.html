@@ -5,7 +5,11 @@
     <title>Pollr</title>
   </head>
   <body>
-    <h1>poll page</h1>
+    <header>
+      <h1>poll page</h1>
+    </header>
+    <p id="connection-count"></p>
+    <p id='vote-message'></p>
     <section id="poll-container">
       <h3 id="poll-question"></h3>
       <ul id="poll-options"></ul>
@@ -13,6 +17,7 @@
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="../js/poll.js"></script>
   </body>
 </html>

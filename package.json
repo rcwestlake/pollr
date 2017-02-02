@@ -28,7 +28,8 @@
     "passport": "^0.3.2",
     "passport-auth0": "^0.6.0",
     "path": "^0.12.7",
-    "shortid": "^2.2.6"
+    "shortid": "^2.2.6",
+    "socket.io": "^1.7.2"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
