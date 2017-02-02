@@ -7,6 +7,7 @@ const connectionCount = $('#connection-count')
 const userMessage = $('#user-message')
 const voteMessage = $('.vote-message')
 let img;
+let nickname;
 
 $(document).ready(function() {
   const getParameterByName = (name, url) => {
@@ -80,9 +81,7 @@ const appendOptionsToDom = (options) => {
   options.map(option => {
     pollOptions.append(`<li class='option ${option.id}'>${option.text}</li>`)
     $(`.${option.id}`).on('click', function() {
-      console.log(option);
-      console.log(img);
-      socket.emit('userVote', option.id, img)
+      socket.emit('userVote', option.id, img, nickname)
     })
   })
 }
@@ -114,6 +113,7 @@ const doAuth = (response, id) => {
       localStorage.setItem('id_token', authResult.idToken);
       pollContainer.css('display', 'block')
       img = profile.picture
+      nickname = profile.nickname
       console.log(img);
       show_profile_info(profile);
     });
