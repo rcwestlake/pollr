@@ -64,7 +64,7 @@ app.locals.options = [
   }
 ]
 
-app.locals.users = []
+app.locals.votes = []
 
 app.set('port', process.env.PORT || 1111)
 app.locals.title = 'Pollr' //change title if necessary
@@ -161,8 +161,11 @@ io.on('connection', (socket) => {
     //thing that was clicked on
     //who clicked on it
     //send it to everyone
+    const voteId = app.locals.votes.length + 1
+    app.locals.votes.push({ id: voteId, choice_id: id, name, })
+    console.log(app.locals.votes);
     socket.emit('userMessage', 'You voted!')
-    io.sockets.emit('voteMessage', id, 'Click on by' + name)
+    io.sockets.emit('voteMessage', id, 'Click on by ' + name)
   })
 
   socket.on('disconnect', () => {
