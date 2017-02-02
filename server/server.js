@@ -97,10 +97,9 @@ app.get('/api/polls/:id', (req, res) => {
   res.status(200).json(result)
 })
 
-app.get('/polls/:uid', (req, res) => {
-  const { uid } = req.params
+app.get('/polls/*', (req, res) => {
+  const { uid } = req.query
 
-  const poll = app.locals.polls.filter(poll => poll.uid == uid)[0]
   res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
 })
 

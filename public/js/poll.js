@@ -8,15 +8,29 @@ const userMessage = $('#user-message')
 const voteMessage = $('.vote-message')
 
 $(document).ready(function() {
-  const id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+  const getParameterByName = (name, url) => {
+   if (!url) {
+     url = window.location.href;
+   }
+   name = name.replace(/[\[\]]/g, "\\$&");
+   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+       results = regex.exec(url);
+   if (!results) return null;
+   if (!results[2]) return '';
+   return decodeURIComponent(results[2].replace(/\+/g, " "));
+ }
+ console.log('url', getParameterByName('id'));
+
 
   axios.get('/authkeys')
   .then(response => {
     doAuth(response)
+  }).then(() => {
+    if(localStorage.getItem('id_token') !== null) {
+      getPollDataFromServer(getParameterByName('id'))
+      console.log(pollContainer);
+    }
   })
-
-
-  getPollDataFromServer(id)
 
   socket.on('usersConnected', (count) => {
     connectionCount.text('# of connected users: ' + count)
@@ -28,7 +42,6 @@ $(document).ready(function() {
 
   socket.on('voteMessage', (id, message) => {
     $(`.${id}`).append(`<p>${message}</p>`)
-    // voteMessage.append(`<p>${message}</p>`)
   })
 })
 
@@ -67,6 +80,7 @@ const appendOptionsToDom = (options) => {
       socket.emit('userVote', option.id, 'ryan')
     })
   })
+  pollContainer.css('display', 'block')
 }
 
 /* Auth  --> remove this comment after refactor */
@@ -74,9 +88,9 @@ const appendOptionsToDom = (options) => {
 const doAuth = (response) => {
   var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
     auth: {
-      redirectUrl: window.location.href
+      params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
     }
-  })
+  });
 
   $('.btn-login').click(function(e) {
     e.preventDefault();
@@ -89,9 +103,9 @@ const doAuth = (response) => {
   })
 
   lock.on("authenticated", function(authResult) {
-    pollContainer.show()
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
+        // Handle error
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
@@ -114,24 +128,16 @@ const doAuth = (response) => {
     }
   };
 
-  function sendProfileToServer(profile) {
-    axios.post('/login', {profile: profile})
-    .then(function(response) {
-      console.log('server response', response);
-    })
-  }
-
   var show_profile_info = function(profile) {
      $('.nickname').text(profile.nickname);
      $('.btn-login').hide();
      $('.avatar').attr('src', profile.picture).show();
      $('.btn-logout').show();
-     sendProfileToServer(profile)
   };
 
   var logout = function() {
     localStorage.removeItem('id_token');
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   retrieve_profile();

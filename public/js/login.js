@@ -1,6 +1,7 @@
 $(document).ready(function() {
   axios.get('/authkeys')
   .then(response => {
+    console.log('response', response);
     doAuth(response)
   })
 });
@@ -8,11 +9,9 @@ $(document).ready(function() {
 const doAuth = (response) => {
   var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
     auth: {
-      params: {
-        scope: 'openid email'
-      }
+      params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
     }
-  })
+  });
 
   $('.btn-login').click(function(e) {
     e.preventDefault();
@@ -27,6 +26,7 @@ const doAuth = (response) => {
   lock.on("authenticated", function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
+        // Handle error
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
@@ -49,24 +49,16 @@ const doAuth = (response) => {
     }
   };
 
-  function sendProfileToServer(profile) {
-    axios.post('/login', {profile: profile})
-    .then(function(response) {
-      console.log('server response', response);
-    })
-  }
-
   var show_profile_info = function(profile) {
      $('.nickname').text(profile.nickname);
      $('.btn-login').hide();
      $('.avatar').attr('src', profile.picture).show();
      $('.btn-logout').show();
-     sendProfileToServer(profile)
   };
 
   var logout = function() {
     localStorage.removeItem('id_token');
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   retrieve_profile();
