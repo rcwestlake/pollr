@@ -96,8 +96,27 @@ textarea {
   margin: 20px auto;
 }
 
-.link-intro {
+#link-container {
+  background: linear-gradient(90deg, #616EEF
+,#09A8FA);
+  background-size: cover;
   display: none;
+  opacity: .9;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+
+.link-text {
+  position: fixed;
+  top: 50%;
+  left: 40%;
+}
+
+.link-intro {
+  z-index: 1111;
 }
 
 /*add responsiveness*/
