@@ -12,17 +12,59 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.locals.polls = [
   {
-    uid: 'HyuueskOe',
-    question: 'dinner?',
-    options: ['burger', 'salad', 'pizza', 'tacos']
+    id: 1,
+    question: 'dinner?'
   },
   {
-    uid: 'ye03830a3',
-    question: 'bball?',
-    options: ['basketball', 'golf', 'football', 'soccer']
+    id: 2,
+    question: 'bball?'
   }
 ]
-app.locals.users = []
+
+app.locals.options = [
+  {
+    id: 1,
+    poll_id: 1,
+    text: 'burger'
+  },
+  {
+    id: 2,
+    poll_id: 1,
+    text: 'pizza'
+  },
+  {
+    id: 3,
+    poll_id: 1,
+    text: 'salad'
+  },
+  {
+    id: 4,
+    poll_id: 1,
+    text: 'tacos'
+  },
+  {
+    id: 5,
+    poll_id: 2,
+    text: 'baseball'
+  },
+  {
+    id: 6,
+    poll_id: 2,
+    text: 'basketball'
+  },
+  {
+    id: 7,
+    poll_id: 2,
+    text: 'soccer'
+  },
+  {
+    id: 8,
+    poll_id: 2,
+    text: 'football'
+  }
+]
+
+app.locals.votes = []
 
 app.set('port', process.env.PORT || 1111)
 app.locals.title = 'Pollr' //change title if necessary
@@ -37,20 +79,20 @@ app.get('/authkeys', (req, res) => {
   res.status(200).json({authId, authDomain})
 })
 
-app.get('/polls', (req, res) => {
+app.get('/api/polls', (req, res) => {
   res.status(200).json(app.locals.polls)
 })
 
-app.post('/polls', (req, res) => {
-  const { question, options } = req.body
-  const uid = shortid.generate()
-  app.locals.polls.push({ uid, question, options })
-  res.status(200).json({ uid, question, options })
+app.post('/api/polls', (req, res) => {
+  const { question } = req.body
+  const id = app.locals.polls.length + 1
+  app.locals.polls.push({ id, question })
+  res.status(200).json({ id, question })
 })
 
-app.get('/api/polls/:uid', (req, res) => {
-  const { uid } = req.params
-  const result = app.locals.polls.filter(poll => poll.uid == uid)[0]
+app.get('/api/polls/:id', (req, res) => {
+  const { id } = req.params
+  const result = app.locals.polls.filter(poll => poll.id == id)[0]
 
   res.status(200).json(result)
 })
@@ -60,6 +102,28 @@ app.get('/polls/:uid', (req, res) => {
 
   const poll = app.locals.polls.filter(poll => poll.uid == uid)[0]
   res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
+})
+
+app.get('/api/options', (req, res) => {
+  res.status(200).json(app.locals.options)
+})
+
+app.post('/api/options', (req, res) => {
+  const { id, options } = req.body
+  console.log(options[0]);
+  const poll_id = id
+  options.map(option => {
+    const id = app.locals.options.length + 1
+    app.locals.options.push({ id, poll_id, text: option })
+  })
+
+  res.status(200).json(app.locals.options)
+})
+
+app.get('/api/options/:id', (req, res) => {
+  const { id } = req.params
+  const optionsById = app.locals.options.filter(option => option.poll_id == id)
+  res.status(200).json(optionsById)
 })
 
 app.get('/login', (req, res) => {
@@ -93,8 +157,15 @@ io.on('connection', (socket) => {
   console.log('A user has connected', io.engine.clientsCount);
   io.sockets.emit('usersConnected', io.engine.clientsCount)
 
-  socket.on('userVote', () => {
-    socket.emit('voteMessage', 'You voted!')
+  socket.on('userVote', (id, name) => {
+    //thing that was clicked on
+    //who clicked on it
+    //send it to everyone
+    const voteId = app.locals.votes.length + 1
+    app.locals.votes.push({ id: voteId, choice_id: id, name, })
+    console.log(app.locals.votes);
+    socket.emit('userMessage', 'You voted!')
+    io.sockets.emit('voteMessage', id, 'Click on by ' + name)
   })
 
   socket.on('disconnect', () => {
