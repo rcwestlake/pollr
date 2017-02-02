@@ -41,12 +41,16 @@ $(document).ready(function() {
     userMessage.text(message)
   })
 
-  socket.on('voteMessage', (id, image) => {
-    $(`.${id}`).append(`<img
-                          src=${image}
-                          alt="user image"
-                          class="vote-img"
-                        />`)
+  socket.on('voteMessage', (id, image, votes) => {
+    $('.vote-img').remove()
+    console.log(votes);
+    votes.map(vote => {
+      return $(`.${vote.choice_id}`).append(`<img
+                              src=${image}
+                              alt="user image"
+                              class="vote-img"
+                            />`)
+    })
   })
 })
 
@@ -79,7 +83,7 @@ const appendOptionsToDom = (options) => {
   }
 
   options.map(option => {
-    pollOptions.append(`<li class='option ${option.id}'>${option.text}</li>`)
+    pollOptions.append(`<div class='option ${option.id}'>${option.text}</div>`)
     $(`.${option.id}`).on('click', function() {
       socket.emit('userVote', option.id, img, nickname)
     })

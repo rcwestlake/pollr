@@ -157,6 +157,7 @@ io.on('connection', (socket) => {
   io.sockets.emit('usersConnected', io.engine.clientsCount)
 
   socket.on('userVote', (id, img, nickname) => {
+    // updateVotes(id, img, nickname)
     const voteId = app.locals.votes.length + 1
 
     if(!app.locals.votes.length) {
@@ -168,18 +169,22 @@ io.on('connection', (socket) => {
     } else {
       app.locals.votes = app.locals.votes.map(vote => {
         if(vote.nickname == nickname) {
-           vote.choice_id = id
+          vote.choice_id = id
         }
         return vote
       })
     }
-
     console.log(app.locals.votes);
     socket.emit('userMessage', 'You voted!')
-    io.sockets.emit('voteMessage', id, img)
+    io.sockets.emit('voteMessage', id, img, app.locals.votes)
   })
 
   socket.on('disconnect', () => {
     console.log('A user has disconnected', io.engine.clientsCount);
   })
 })
+
+// const updateVotes = (id, img, nickname) => {
+//   let previousChoice;
+//
+// }
