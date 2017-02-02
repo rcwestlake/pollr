@@ -32,5 +32,5 @@ const sendPollToServer = (question, options) => {
 
 const appendLinkToPage = (response) => {
   $('#link-container').show()
-  $('#link').html(`<a href='/polls/${response.id}'>Click to share link!</a>`)
+  $('#link').html(`<a href='/polls/?id=${response.id}'>Click to share link!</a>`)
 }
