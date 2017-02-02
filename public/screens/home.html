@@ -10,24 +10,36 @@
   <body>
     <header>
       <h1>Pollr</h1>
-      <p id="tagline">
-        Easy polls/surveys. Simply enter your question and add answer options. After submitting, a link will appear, which you can then share with the world.
-      </p>
+      <div id="tagline">
+        <p>
+          Easy polls/surveys. Simply enter your question and add answer options.
+        </p>
+        <p>
+          After submitting, a link will appear, which you can then share with the world.
+        </p>
+      </div>
     </header>
-    <form id="create-poll-container">
-      <input
-        id="question"
-        type="text"
-        placeholder="Enter your question"
-        autofocus
-      />
-      <h3>Give em' options</h3>
-      <input class="option" type="text" placeholder="Option 1" />
-      <input class="option" type="text" placeholder="Option 2" />
-      <input class="option" type="text" placeholder="Option 3" />
-      <input class="option" type="text" placeholder="Option 4" />
-      <button id="submit-poll-btn" class="">Create Poll</button>
-    </form>
+
+    <section id="form-container">
+      <form id="create-poll-container">
+        <div id="question-container">
+          <h3>Enter your question</h3>
+          <input
+            id="question"
+            placeholder="Enter your question"
+            autofocus
+          />
+        </div>
+        <div id="options-container">
+          <h3>Enter options</h3>
+          <input class="option" type="text" placeholder="Option 1" />
+          <input class="option" type="text" placeholder="Option 2" />
+          <input class="option" type="text" placeholder="Option 3" />
+          <input class="option" type="text" placeholder="Option 4" />
+        </div>
+        <button id="submit-poll-btn" class="">Create Poll</button>
+      </form>
+    </section>
 
     <section id="link-container">
       <h3 class="link-intro">
