@@ -19,17 +19,16 @@ $(document).ready(function() {
    if (!results[2]) return '';
    return decodeURIComponent(results[2].replace(/\+/g, " "));
  }
- console.log('url', getParameterByName('id'));
 
+ if(localStorage.getItem('id_token') !== null) {
+   pollContainer.css('display', 'block')
+ }
+
+ getPollDataFromServer(getParameterByName('id'))
 
   axios.get('/authkeys')
   .then(response => {
-    doAuth(response)
-  }).then(() => {
-    if(localStorage.getItem('id_token') !== null) {
-      getPollDataFromServer(getParameterByName('id'))
-      console.log(pollContainer);
-    }
+    doAuth(response, getParameterByName('id'))
   })
 
   socket.on('usersConnected', (count) => {
@@ -46,6 +45,7 @@ $(document).ready(function() {
 })
 
 const getPollDataFromServer = (id) => {
+  debugger
   if(id) {
     axios.get(`/api/polls/${id}`)
     .then(response => {
@@ -80,15 +80,14 @@ const appendOptionsToDom = (options) => {
       socket.emit('userVote', option.id, 'ryan')
     })
   })
-  pollContainer.css('display', 'block')
 }
 
 /* Auth  --> remove this comment after refactor */
 
-const doAuth = (response) => {
+const doAuth = (response, id) => {
   var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
     auth: {
-      params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
+      params: { scope: 'openid email' }
     }
   });
 
@@ -105,11 +104,10 @@ const doAuth = (response) => {
   lock.on("authenticated", function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
-        // Handle error
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
-      // Display user information
+      pollContainer.css('display', 'block')
       show_profile_info(profile);
     });
   });
@@ -122,7 +120,7 @@ const doAuth = (response) => {
         if (err) {
           return alert('There was an error getting the profile: ' + err.message);
         }
-        // Display user information
+
         show_profile_info(profile);
       });
     }
@@ -137,7 +135,7 @@ const doAuth = (response) => {
 
   var logout = function() {
     localStorage.removeItem('id_token');
-    window.location.href = "/";
+    window.location.href = `/polls/?id=${id}`;
   };
 
   retrieve_profile();
