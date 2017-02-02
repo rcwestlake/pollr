@@ -14,13 +14,19 @@ const getOptionsOnClick = (options) => {
 }
 
 const sendPollToServer = (question, options) => {
-  axios.post('/polls', { question, options })
+  axios.post('/polls', { question })
   .then(response => {
     appendLinkToPage(response.data)
+    console.log(options);
+    console.log(response.data);
+    axios.post('/options', ({id: response.data.id, options: options}))
+    .then(response => {
+      console.log(response);
+    })
   })
 }
 
 const appendLinkToPage = (response) => {
   $('.link-intro').css('display', 'block')
-  $('#link').html(`<a href='/polls/${response.uid}'>Click to share link!</a>`)
+  $('#link').html(`<a href='/polls/${response.id}'>Click to share link!</a>`)
 }

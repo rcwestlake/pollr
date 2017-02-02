@@ -12,16 +12,38 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.locals.polls = [
   {
-    uid: 'HyuueskOe',
-    question: 'dinner?',
-    options: ['burger', 'salad', 'pizza', 'tacos']
+    id: 1,
+    question: 'dinner?'
   },
   {
-    uid: 'ye03830a3',
-    question: 'bball?',
-    options: ['basketball', 'golf', 'football', 'soccer']
+    id: 2,
+    question: 'bball?'
   }
 ]
+
+app.locals.options = [
+  {
+    id: 1,
+    poll_id: 1,
+    text: 'burger'
+  },
+  {
+    id: 2,
+    poll_id: 1,
+    text: 'pizza'
+  },
+  {
+    id: 3,
+    poll_id: 1,
+    text: 'salad'
+  },
+  {
+    id: 4,
+    poll_id: 1,
+    text: 'tacos'
+  }
+]
+
 app.locals.users = []
 
 app.set('port', process.env.PORT || 1111)
@@ -42,10 +64,27 @@ app.get('/polls', (req, res) => {
 })
 
 app.post('/polls', (req, res) => {
-  const { question, options } = req.body
-  const uid = shortid.generate()
-  app.locals.polls.push({ uid, question, options })
-  res.status(200).json({ uid, question, options })
+  const { question } = req.body
+  const id = app.locals.polls.length + 1
+  app.locals.polls.push({ id, question })
+  res.status(200).json({ id, question })
+})
+
+app.get('/options', (req, res) => {
+  res.status(200).json(app.locals.options)
+})
+
+app.post('/options', (req, res) => {
+  const { id, options } = req.body
+  console.log(id);
+  console.log(options[0]);
+  const poll_id = id
+  options.map(option => {
+    const id = app.locals.options.length + 1
+    app.locals.options.push({ id, poll_id, text: option })
+  })
+
+  res.status(200).json(app.locals.options)
 })
 
 app.get('/api/polls/:uid', (req, res) => {
