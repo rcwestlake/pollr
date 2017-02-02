@@ -6,6 +6,10 @@ $('#submit-poll-btn').on('click', (e) => {
   sendPollToServer(question, options)
 })
 
+$('#back-to-poll-btn').on('click', () => {
+  $('#link-container').hide()
+})
+
 const getOptionsOnClick = (options) => {
   $('.option').each(function() {
     options.push($(this).val())
@@ -27,6 +31,6 @@ const sendPollToServer = (question, options) => {
 }
 
 const appendLinkToPage = (response) => {
-  $('.link-intro').css('display', 'block')
+  $('#link-container').show()
   $('#link').html(`<a href='/polls/${response.id}'>Click to share link!</a>`)
 }
