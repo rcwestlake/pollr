@@ -1,3 +1,9 @@
 .avatar {
   display: none;
 }
+
+.vote-img {
+  height: 25px;
+  width: 25px;
+  border-radius: 10px;
+}

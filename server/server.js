@@ -156,15 +156,15 @@ io.on('connection', (socket) => {
   console.log('A user has connected', io.engine.clientsCount);
   io.sockets.emit('usersConnected', io.engine.clientsCount)
 
-  socket.on('userVote', (id, name) => {
+  socket.on('userVote', (id, img) => {
     //thing that was clicked on
     //who clicked on it
     //send it to everyone
     const voteId = app.locals.votes.length + 1
-    app.locals.votes.push({ id: voteId, choice_id: id, name, })
+    app.locals.votes.push({ id: voteId, choice_id: id, img })
     console.log(app.locals.votes);
     socket.emit('userMessage', 'You voted!')
-    io.sockets.emit('voteMessage', id, 'Click on by ' + name)
+    io.sockets.emit('voteMessage', id, img)
   })
 
   socket.on('disconnect', () => {

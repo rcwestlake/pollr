@@ -6,6 +6,7 @@ const pollOptions = $('#poll-options')
 const connectionCount = $('#connection-count')
 const userMessage = $('#user-message')
 const voteMessage = $('.vote-message')
+let img;
 
 $(document).ready(function() {
   const getParameterByName = (name, url) => {
@@ -39,13 +40,16 @@ $(document).ready(function() {
     userMessage.text(message)
   })
 
-  socket.on('voteMessage', (id, message) => {
-    $(`.${id}`).append(`<p>${message}</p>`)
+  socket.on('voteMessage', (id, image) => {
+    $(`.${id}`).append(`<img
+                          src=${image}
+                          alt="user image"
+                          class="vote-img"
+                        />`)
   })
 })
 
 const getPollDataFromServer = (id) => {
-  debugger
   if(id) {
     axios.get(`/api/polls/${id}`)
     .then(response => {
@@ -77,7 +81,8 @@ const appendOptionsToDom = (options) => {
     pollOptions.append(`<li class='option ${option.id}'>${option.text}</li>`)
     $(`.${option.id}`).on('click', function() {
       console.log(option);
-      socket.emit('userVote', option.id, 'ryan')
+      console.log(img);
+      socket.emit('userVote', option.id, img)
     })
   })
 }
@@ -108,6 +113,8 @@ const doAuth = (response, id) => {
       }
       localStorage.setItem('id_token', authResult.idToken);
       pollContainer.css('display', 'block')
+      img = profile.picture
+      console.log(img);
       show_profile_info(profile);
     });
   });
