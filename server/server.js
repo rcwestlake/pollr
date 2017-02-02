@@ -41,6 +41,26 @@ app.locals.options = [
     id: 4,
     poll_id: 1,
     text: 'tacos'
+  },
+  {
+    id: 5,
+    poll_id: 2,
+    text: 'baseball'
+  },
+  {
+    id: 6,
+    poll_id: 2,
+    text: 'basketball'
+  },
+  {
+    id: 7,
+    poll_id: 2,
+    text: 'soccer'
+  },
+  {
+    id: 8,
+    poll_id: 2,
+    text: 'football'
   }
 ]
 
@@ -59,24 +79,37 @@ app.get('/authkeys', (req, res) => {
   res.status(200).json({authId, authDomain})
 })
 
-app.get('/polls', (req, res) => {
+app.get('/api/polls', (req, res) => {
   res.status(200).json(app.locals.polls)
 })
 
-app.post('/polls', (req, res) => {
+app.post('/api/polls', (req, res) => {
   const { question } = req.body
   const id = app.locals.polls.length + 1
   app.locals.polls.push({ id, question })
   res.status(200).json({ id, question })
 })
 
-app.get('/options', (req, res) => {
+app.get('/api/polls/:id', (req, res) => {
+  const { id } = req.params
+  const result = app.locals.polls.filter(poll => poll.id == id)[0]
+
+  res.status(200).json(result)
+})
+
+app.get('/polls/:uid', (req, res) => {
+  const { uid } = req.params
+
+  const poll = app.locals.polls.filter(poll => poll.uid == uid)[0]
+  res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
+})
+
+app.get('/api/options', (req, res) => {
   res.status(200).json(app.locals.options)
 })
 
-app.post('/options', (req, res) => {
+app.post('/api/options', (req, res) => {
   const { id, options } = req.body
-  console.log(id);
   console.log(options[0]);
   const poll_id = id
   options.map(option => {
@@ -87,18 +120,10 @@ app.post('/options', (req, res) => {
   res.status(200).json(app.locals.options)
 })
 
-app.get('/api/polls/:uid', (req, res) => {
-  const { uid } = req.params
-  const result = app.locals.polls.filter(poll => poll.uid == uid)[0]
-
-  res.status(200).json(result)
-})
-
-app.get('/polls/:uid', (req, res) => {
-  const { uid } = req.params
-
-  const poll = app.locals.polls.filter(poll => poll.uid == uid)[0]
-  res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
+app.get('/api/options/:id', (req, res) => {
+  const { id } = req.params
+  const optionsById = app.locals.options.filter(option => option.poll_id == id)
+  res.status(200).json(optionsById)
 })
 
 app.get('/login', (req, res) => {

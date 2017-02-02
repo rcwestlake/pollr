@@ -6,14 +6,18 @@ const connectionCount = $('#connection-count')
 const voteMessage = $('#vote-message')
 
 $(document).ready(function() {
-  let pollData;
-  const uid = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+  const id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
 
-  if(uid) {
-    axios.get(`/api/polls/${uid}`)
+  if(id) {
+    axios.get(`/api/polls/${id}`)
     .then(response => {
-      pollData = response.data
-      appendPollToDom(pollData)
+      appendQuestionToDom(response.data)
+    })
+    .then(() => {
+      axios.get(`/api/options/${id}`)
+      .then(response => {
+        appendOptionsToDom(response.data)
+      })
     })
   }
 
@@ -26,14 +30,21 @@ $(document).ready(function() {
   })
 })
 
-const appendPollToDom = (poll) => {
-  if(!poll.question || !poll.options.length) {
-    throw new Error('You do not have the proper info for a poll')
+const appendQuestionToDom = (poll) => {
+  if(!poll.question) {
+    throw new Error('You do not have a question for your poll')
   }
 
   pollQuestion.text(poll.question)
-  poll.options.map(option => {
-    pollOptions.append(`<li class='option'>${option}</li>`)
+}
+
+const appendOptionsToDom = (options) => {
+  if(!options.length) {
+    throw new Error('You do not have options for your poll')
+  }
+  
+  options.map(option => {
+    pollOptions.append(`<li class='option'>${option.text}</li>`)
   })
   $('.option').on('click', function() {
     socket.emit('userVote', this.innerText)
