@@ -12,6 +12,7 @@ let nickname;
 $(document).ready(function() {
  if(localStorage.getItem('id_token') !== null) {
    pollContainer.css('display', 'block')
+   getProfileFromStorage()
  }
 
  getPollDataFromServer(getParameterByName('id'))
@@ -24,6 +25,12 @@ $(document).ready(function() {
   socketIoActivity()
 })
 
+const getProfileFromStorage = () => {
+  let profileData = JSON.parse(localStorage.getItem('profile'))
+  img = profileData.picture
+  nickname = profileData.nickname
+}
+
 const socketIoActivity = () => {
   socket.on('usersConnected', (count) => {
     connectionCount.text('# of connected users: ' + count)
@@ -35,9 +42,11 @@ const socketIoActivity = () => {
 
   socket.on('voteMessage', (id, image, votes) => {
     $('.vote-img').remove()
+    console.log('updated votes', votes);
     votes.map(vote => {
+      console.log('vote in map', vote);
       return $(`.${vote.choice_id}`).append(`<img
-                              src=${image}
+                              src=${vote.img}
                               alt="user image"
                               class="vote-img"
                             />`)
@@ -67,6 +76,18 @@ const getPollDataFromServer = (id) => {
       axios.get(`/api/options/${id}`)
       .then(response => {
         appendOptionsToDom(response.data)
+      })
+    })
+    .then(() => {
+      axios.get('/api/votes')
+      .then(votes => {
+        votes.data.map(vote => {
+          return $(`.${vote.choice_id}`).append(`<img
+                                  src=${vote.img}
+                                  alt="user image"
+                                  class="vote-img"
+                                />`)
+        })
       })
     })
   }
@@ -117,6 +138,7 @@ const doAuth = (response, id) => {
       }
 
       localStorage.setItem('id_token', authResult.idToken);
+      localStorage.setItem('profile', JSON.stringify(profile))
       setProfileVariables(profile)
       pollContainer.css('display', 'block')
 

@@ -124,6 +124,10 @@ app.get('/api/options/:id', (req, res) => {
   res.status(200).json(optionsById)
 })
 
+app.get('/api/votes', (req, res) => {
+  res.status(200).json(app.locals.votes)
+})
+
 app.get('*', (req, res) => {
   res.send('page not found - try again')
 })
@@ -157,18 +161,13 @@ io.on('connection', (socket) => {
 const updateVotes = (id, img, nickname) => {
   const voteId = app.locals.votes.length + 1
 
-  if(!app.locals.votes.length) {
-    app.locals.votes.push({ id: voteId,
-                            choice_id: id,
-                            img,
-                            nickname
-                          })
-  } else {
-    app.locals.votes = app.locals.votes.map(vote => {
-      if(vote.nickname == nickname) {
-        vote.choice_id = id
-      }
-      return vote
-    })
-  }
+  const clearUserVote = app.locals.votes.filter(vote => vote.nickname !== nickname)
+  app.locals.votes = clearUserVote
+  app.locals.votes.push({ id: voteId,
+                          choice_id: id,
+                          img,
+                          nickname
+                        })
+
+  return app.locals.votes
 }
