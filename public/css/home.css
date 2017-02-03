@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,800');
+
 
 body {
   background-color: #FFCE3E;
+  font-family: 'Open Sans', sans-serif;
 }
 
 header {
@@ -14,11 +17,16 @@ button {
 
 h1 {
   color: #ffffff;
-  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-size: 250px;
   font-weight: 700;
   margin: 0px;
   width: 100%;
+}
+
+h3 {
+  font-weight: 800;
+  margin-bottom: 27px;
 }
 
 #tagline {
@@ -29,8 +37,8 @@ h1 {
   margin: 3px 15px;
 }
 
-input, textarea {
-  color: #D53939;
+input {
+  color: #ffffff;
   outline: none;
   display: block;
 }
@@ -46,22 +54,19 @@ input, textarea {
   text-align: center;
 }
 
-textarea {
-  resize: none;
-}
-
 #question-container {
   display: inline-block;
   vertical-align: top;
   min-height: 100%;
+  text-align: left;
   width: 40%;
 }
 
 #question {
   background-color: #FFCE3E;
   border: none;
-  border-bottom: 4px solid #D53939;
-  font-size: 25px;
+  border-bottom: 2px solid #D53939;
+  font-size: 20px;
   width: 95%;
 }
 
@@ -77,9 +82,9 @@ textarea {
   flex-direction: column;
   background-color: #FFCE3E;
   border: none;
-  border-bottom: 4px solid #D53939;
-  font-size: 25px;
-  padding: 15px 0px;
+  border-bottom: 2px solid #D53939;
+  font-size: 20px;
+  padding: 10px 0px;
   text-align: left;
   width: 70%;
 }
@@ -91,9 +96,10 @@ textarea {
   color: #ffffff;
   display: block;
   font-size: 20px;
+  font-weight: bold;
   height: 40px;
   width: 200px;
-  margin: 20px auto;
+  margin: 40px auto;
 }
 
 #link-container {
@@ -110,13 +116,37 @@ textarea {
 }
 
 .link-text {
-  position: fixed;
-  top: 50%;
-  left: 40%;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 25%;
 }
 
 .link-intro {
+  color: #ffffff;
+  font-size: 35px;
   z-index: 1111;
 }
 
-/*add responsiveness*/
+a {
+  color: inherit;
+}
+
+#link {
+  color: #FFCE3E;
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 18px;
+}
+
+#back-to-poll-btn {
+  background-color: #7BC7FA;
+  border: none;
+  border-radius: 25px;
+  color: #ffffff;
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  height: 40px;
+  width: 150px;
+  margin: 35px auto;
+}
