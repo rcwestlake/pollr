@@ -129,7 +129,7 @@ app.get('/api/votes', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-  res.send('page not found - try again')
+  res.sendFile(path.join(__dirname, '../public/screens', 'not-found.html'));
 })
 
 
