@@ -13,4 +13,4 @@
 
 ##Live Site:
 [Site](http://pollr-al.herokuapp.com/)
-**note: auth0 provides time restrictions for the free version. If login is broken, that's the culprit.**
+>note: auth0 provides time restrictions for the free version. If login is broken, that's the culprit.
