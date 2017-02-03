@@ -3,7 +3,6 @@ const app = express()
 const http = require('http')
 const path = require('path')
 const bodyParser = require('body-parser')
-const shortid = require('shortid')
 require('dotenv').config()
 
 app.use(express.static('public'))
@@ -123,18 +122,6 @@ app.get('/api/options/:id', (req, res) => {
   const { id } = req.params
   const optionsById = app.locals.options.filter(option => option.poll_id == id)
   res.status(200).json(optionsById)
-})
-
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/screens', 'login.html'));
-})
-
-app.post('/login', (req, res) => {
-  const { profile } = req.body
-  const nickname = profile.nickname
-  const img = profile.picture
-  app.locals.users.push({ nickname, img })
-  res.status(200).json(app.locals.users)
 })
 
 app.get('*', (req, res) => {

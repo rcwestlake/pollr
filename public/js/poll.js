@@ -21,6 +21,10 @@ $(document).ready(function() {
     doAuth(response, getParameterByName('id'))
   })
 
+  socketIoActivity()
+})
+
+const socketIoActivity = () => {
   socket.on('usersConnected', (count) => {
     connectionCount.text('# of connected users: ' + count)
   })
@@ -39,7 +43,7 @@ $(document).ready(function() {
                             />`)
     })
   })
-})
+}
 
 const getParameterByName = (name, url) => {
   if (!url) {
