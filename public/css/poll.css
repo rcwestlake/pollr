@@ -97,3 +97,21 @@ h1 {
   margin-top: 5px;
   margin-right: 3px;
 }
+
+@media screen and (max-width: 650px) {
+  header {
+    width: 125px;
+  }
+
+  .btn-login {
+    margin-bottom: 10px;
+  }
+
+  #poll-container {
+    margin-left: 80px;
+  }
+
+  #connection-count, #user-message {
+    font-size: 15px;
+  }
+}

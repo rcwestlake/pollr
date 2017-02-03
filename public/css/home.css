@@ -65,6 +65,7 @@ input {
   border: none;
   border-bottom: 2px solid #D53939;
   font-size: 20px;
+  padding: 10px 0;
   width: 95%;
 }
 
@@ -147,4 +148,28 @@ a {
   height: 40px;
   width: 150px;
   margin: 35px auto;
+}
+
+@media screen and (max-width: 750px) {
+  h1 {
+    font-size: 165px;
+  }
+
+  #question-container, #options-container {
+    width: 50%;
+  }
+
+  #options-container {
+    padding-left: 0px;
+    border: none;
+  }
+
+  .option {
+    padding: 5px;
+    width: 95%;
+  }
+
+  #question-container {
+    margin-bottom: 25px;
+  }
 }
