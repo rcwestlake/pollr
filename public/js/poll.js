@@ -10,18 +10,6 @@ let img;
 let nickname;
 
 $(document).ready(function() {
-  const getParameterByName = (name, url) => {
-   if (!url) {
-     url = window.location.href;
-   }
-   name = name.replace(/[\[\]]/g, "\\$&");
-   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-       results = regex.exec(url);
-   if (!results) return null;
-   if (!results[2]) return '';
-   return decodeURIComponent(results[2].replace(/\+/g, " "));
- }
-
  if(localStorage.getItem('id_token') !== null) {
    pollContainer.css('display', 'block')
  }
@@ -43,7 +31,6 @@ $(document).ready(function() {
 
   socket.on('voteMessage', (id, image, votes) => {
     $('.vote-img').remove()
-    console.log(votes);
     votes.map(vote => {
       return $(`.${vote.choice_id}`).append(`<img
                               src=${image}
@@ -53,6 +40,18 @@ $(document).ready(function() {
     })
   })
 })
+
+const getParameterByName = (name, url) => {
+  if (!url) {
+   url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+     results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
 const getPollDataFromServer = (id) => {
   if(id) {
@@ -90,8 +89,6 @@ const appendOptionsToDom = (options) => {
   })
 }
 
-/* Auth  --> remove this comment after refactor */
-
 const doAuth = (response, id) => {
   var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
     auth: {
@@ -106,7 +103,7 @@ const doAuth = (response, id) => {
 
   $('.btn-logout').click(function(e) {
     e.preventDefault();
-    logout();
+    logout(id);
   })
 
   lock.on("authenticated", function(authResult) {
@@ -114,40 +111,44 @@ const doAuth = (response, id) => {
       if (error) {
         return;
       }
+
       localStorage.setItem('id_token', authResult.idToken);
+      setProfileVariables(profile)
       pollContainer.css('display', 'block')
-      img = profile.picture
-      nickname = profile.nickname
-      console.log(img);
-      show_profile_info(profile);
+
+      showProfileInfo(profile);
     });
   });
 
-  //retrieve the profile:
-  var retrieve_profile = function() {
-    var id_token = localStorage.getItem('id_token');
-    if (id_token) {
-      lock.getProfile(id_token, function (err, profile) {
-        if (err) {
-          return alert('There was an error getting the profile: ' + err.message);
-        }
+  retrieveProfile(lock);
+}
 
-        show_profile_info(profile);
-      });
-    }
-  };
+const showProfileInfo = (profile) => {
+   $('.nickname').text(profile.nickname);
+   $('.btn-login').hide();
+   $('.avatar').attr('src', profile.picture).show();
+   $('.btn-logout').show();
+}
 
-  var show_profile_info = function(profile) {
-     $('.nickname').text(profile.nickname);
-     $('.btn-login').hide();
-     $('.avatar').attr('src', profile.picture).show();
-     $('.btn-logout').show();
-  };
+const retrieveProfile = (lock) => {
+  var id_token = localStorage.getItem('id_token');
+  if (id_token) {
+    lock.getProfile(id_token, function (err, profile) {
+      if (err) {
+        return alert('There was an error getting the profile: ' + err.message);
+      }
 
-  var logout = function() {
-    localStorage.removeItem('id_token');
-    window.location.href = `/polls/?id=${id}`;
-  };
+      showProfileInfo(profile);
+    })
+  }
+}
 
-  retrieve_profile();
+const logout = (id) => {
+  localStorage.removeItem('id_token');
+  window.location.href = `/polls/?id=${id}`;
+}
+
+const setProfileVariables = (profile) => {
+  img = profile.picture
+  nickname = profile.nickname
 }

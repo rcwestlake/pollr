@@ -153,38 +153,35 @@ var socketIo = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
-  console.log('A user has connected', io.engine.clientsCount);
   io.sockets.emit('usersConnected', io.engine.clientsCount)
 
   socket.on('userVote', (id, img, nickname) => {
-    // updateVotes(id, img, nickname)
-    const voteId = app.locals.votes.length + 1
+    updateVotes(id, img, nickname)
 
-    if(!app.locals.votes.length) {
-      app.locals.votes.push({ id: voteId,
-                              choice_id: id,
-                              img,
-                              nickname
-                            })
-    } else {
-      app.locals.votes = app.locals.votes.map(vote => {
-        if(vote.nickname == nickname) {
-          vote.choice_id = id
-        }
-        return vote
-      })
-    }
-    console.log(app.locals.votes);
-    socket.emit('userMessage', 'You voted!')
+    socket.emit('userMessage', 'Thanks for your input!')
     io.sockets.emit('voteMessage', id, img, app.locals.votes)
   })
 
   socket.on('disconnect', () => {
-    console.log('A user has disconnected', io.engine.clientsCount);
+    io.sockets.emit('usersConnected', io.engine.clientsCount)
   })
 })
 
-// const updateVotes = (id, img, nickname) => {
-//   let previousChoice;
-//
-// }
+const updateVotes = (id, img, nickname) => {
+  const voteId = app.locals.votes.length + 1
+
+  if(!app.locals.votes.length) {
+    app.locals.votes.push({ id: voteId,
+                            choice_id: id,
+                            img,
+                            nickname
+                          })
+  } else {
+    app.locals.votes = app.locals.votes.map(vote => {
+      if(vote.nickname == nickname) {
+        vote.choice_id = id
+      }
+      return vote
+    })
+  }
+}
