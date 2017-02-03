@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,800');
+
 
 body {
   background-color: #FFCE3E;
+  font-family: 'Open Sans', sans-serif;
 }
 
 header {
@@ -14,11 +17,15 @@ button {
 
 h1 {
   color: #ffffff;
-  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-size: 250px;
   font-weight: 700;
   margin: 0px;
   width: 100%;
+}
+
+h3 {
+  font-weight: 800;
 }
 
 #tagline {
@@ -29,8 +36,8 @@ h1 {
   margin: 3px 15px;
 }
 
-input, textarea {
-  color: #D53939;
+input {
+  color: #ffffff;
   outline: none;
   display: block;
 }
@@ -46,14 +53,11 @@ input, textarea {
   text-align: center;
 }
 
-textarea {
-  resize: none;
-}
-
 #question-container {
   display: inline-block;
   vertical-align: top;
   min-height: 100%;
+  text-align: left;
   width: 40%;
 }
 
@@ -61,7 +65,8 @@ textarea {
   background-color: #FFCE3E;
   border: none;
   border-bottom: 4px solid #D53939;
-  font-size: 25px;
+  font-size: 20px;
+  margin-top: 27px;
   width: 95%;
 }
 
@@ -78,8 +83,8 @@ textarea {
   background-color: #FFCE3E;
   border: none;
   border-bottom: 4px solid #D53939;
-  font-size: 25px;
-  padding: 15px 0px;
+  font-size: 20px;
+  padding: 10px 0px;
   text-align: left;
   width: 70%;
 }
@@ -93,7 +98,7 @@ textarea {
   font-size: 20px;
   height: 40px;
   width: 200px;
-  margin: 20px auto;
+  margin: 40px auto;
 }
 
 #link-container {
@@ -118,5 +123,3 @@ textarea {
 .link-intro {
   z-index: 1111;
 }
-
-/*add responsiveness*/
