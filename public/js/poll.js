@@ -42,7 +42,6 @@ const socketIoActivity = () => {
 
   socket.on('voteMessage', (id, image, votes) => {
     $('.vote-img').remove()
-    console.log('updated votes', votes);
     votes.map(vote => {
       return $(`.${vote.choice_id}`).append(`<img
                               src=${vote.img}
@@ -80,7 +79,6 @@ const getPollDataFromServer = (id) => {
     .then(() => {
       axios.get('/api/votes')
       .then(votes => {
-        console.log('votes in getPollDataFromServer', votes);
         votes.data.map(vote => {
           return $(`.${vote.choice_id}`).append(`<img
                                   src=${vote.img}

@@ -21,12 +21,7 @@ const sendPollToServer = (question, options) => {
   axios.post('/api/polls', { question })
   .then(response => {
     appendLinkToPage(response.data)
-    console.log(options);
-    console.log(response.data);
     axios.post('/api/options', ({id: response.data.id, options: options}))
-    .then(response => {
-      console.log(response);
-    })
   })
 }
 

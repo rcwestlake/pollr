@@ -108,7 +108,6 @@ app.get('/api/options', (req, res) => {
 
 app.post('/api/options', (req, res) => {
   const { id, options } = req.body
-  console.log(options[0]);
   const poll_id = id
   options.map(option => {
     const id = app.locals.options.length + 1
