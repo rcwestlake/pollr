@@ -37,7 +37,7 @@ h1 {
 }
 
 #user-message {
-  margin-top: 10px 10px;
+  margin: 10px 10px;
 }
 
 .btn-login, .btn-logout {

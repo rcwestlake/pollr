@@ -116,11 +116,37 @@ input {
 }
 
 .link-text {
-  position: fixed;
-  top: 50%;
-  left: 40%;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 25%;
 }
 
 .link-intro {
+  color: #ffffff;
+  font-size: 35px;
   z-index: 1111;
+}
+
+a {
+  color: inherit;
+}
+
+#link {
+  color: #FFCE3E;
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 18px;
+}
+
+#back-to-poll-btn {
+  background-color: #7BC7FA;
+  border: none;
+  border-radius: 25px;
+  color: #ffffff;
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  height: 40px;
+  width: 150px;
+  margin: 35px auto;
 }
