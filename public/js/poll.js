@@ -78,6 +78,18 @@ const getPollDataFromServer = (id) => {
         appendOptionsToDom(response.data)
       })
     })
+    .then(() => {
+      axios.get('/api/votes')
+      .then(votes => {
+        votes.data.map(vote => {
+          return $(`.${vote.choice_id}`).append(`<img
+                                  src=${vote.img}
+                                  alt="user image"
+                                  class="vote-img"
+                                />`)
+        })
+      })
+    })
   }
 }
 
