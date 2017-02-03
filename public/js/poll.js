@@ -178,3 +178,8 @@ const setProfileVariables = (profile) => {
   img = profile.picture
   nickname = profile.nickname
 }
+
+//exports function for testing
+if(typeof module !== 'undefined') {
+  module.exports = getParameterByName
+}
