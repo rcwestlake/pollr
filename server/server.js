@@ -99,7 +99,7 @@ app.get('/api/polls/:id', (req, res) => {
 app.get('/polls/*', (req, res) => {
   const { uid } = req.query
 
-  res.sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
+  res.status(200).sendFile(path.join(__dirname, '../public/screens', 'poll.html'));
 })
 
 app.get('/api/options', (req, res) => {
@@ -129,7 +129,7 @@ app.get('/api/votes', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/screens', 'not-found.html'));
+  res.status(404).sendFile(path.join(__dirname, '../public/screens', 'not-found.html'));
 })
 
 
@@ -171,3 +171,5 @@ const updateVotes = (id, img, nickname) => {
 
   return app.locals.votes
 }
+
+module.exports = server

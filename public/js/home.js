@@ -34,3 +34,8 @@ const appendLinkToPage = (response) => {
   $('#link-container').show()
   $('#link').html(`<a href='/polls/?id=${response.id}'>Click to share link!</a>`)
 }
+
+// exports function for testing
+if(typeof module !== 'undefined') {
+  module.exports = getOptionsOnClick
+}
