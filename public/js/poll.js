@@ -6,20 +6,10 @@ const pollOptions = $('#poll-options')
 const connectionCount = $('#connection-count')
 const userMessage = $('#user-message')
 const voteMessage = $('.vote-message')
+let img;
+let nickname;
 
 $(document).ready(function() {
-  const getParameterByName = (name, url) => {
-   if (!url) {
-     url = window.location.href;
-   }
-   name = name.replace(/[\[\]]/g, "\\$&");
-   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-       results = regex.exec(url);
-   if (!results) return null;
-   if (!results[2]) return '';
-   return decodeURIComponent(results[2].replace(/\+/g, " "));
- }
-
  if(localStorage.getItem('id_token') !== null) {
    pollContainer.css('display', 'block')
  }
@@ -31,6 +21,10 @@ $(document).ready(function() {
     doAuth(response, getParameterByName('id'))
   })
 
+  socketIoActivity()
+})
+
+const socketIoActivity = () => {
   socket.on('usersConnected', (count) => {
     connectionCount.text('# of connected users: ' + count)
   })
@@ -39,13 +33,31 @@ $(document).ready(function() {
     userMessage.text(message)
   })
 
-  socket.on('voteMessage', (id, message) => {
-    $(`.${id}`).append(`<p>${message}</p>`)
+  socket.on('voteMessage', (id, image, votes) => {
+    $('.vote-img').remove()
+    votes.map(vote => {
+      return $(`.${vote.choice_id}`).append(`<img
+                              src=${image}
+                              alt="user image"
+                              class="vote-img"
+                            />`)
+    })
   })
-})
+}
+
+const getParameterByName = (name, url) => {
+  if (!url) {
+   url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+     results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
 const getPollDataFromServer = (id) => {
-  debugger
   if(id) {
     axios.get(`/api/polls/${id}`)
     .then(response => {
@@ -74,15 +86,12 @@ const appendOptionsToDom = (options) => {
   }
 
   options.map(option => {
-    pollOptions.append(`<li class='option ${option.id}'>${option.text}</li>`)
+    pollOptions.append(`<div class='option ${option.id}'>${option.text}</div>`)
     $(`.${option.id}`).on('click', function() {
-      console.log(option);
-      socket.emit('userVote', option.id, 'ryan')
+      socket.emit('userVote', option.id, img, nickname)
     })
   })
 }
-
-/* Auth  --> remove this comment after refactor */
 
 const doAuth = (response, id) => {
   var lock = new Auth0Lock(response.data.authId, response.data.authDomain, {
@@ -98,7 +107,7 @@ const doAuth = (response, id) => {
 
   $('.btn-logout').click(function(e) {
     e.preventDefault();
-    logout();
+    logout(id);
   })
 
   lock.on("authenticated", function(authResult) {
@@ -106,37 +115,44 @@ const doAuth = (response, id) => {
       if (error) {
         return;
       }
+
       localStorage.setItem('id_token', authResult.idToken);
+      setProfileVariables(profile)
       pollContainer.css('display', 'block')
-      show_profile_info(profile);
+
+      showProfileInfo(profile);
     });
   });
 
-  //retrieve the profile:
-  var retrieve_profile = function() {
-    var id_token = localStorage.getItem('id_token');
-    if (id_token) {
-      lock.getProfile(id_token, function (err, profile) {
-        if (err) {
-          return alert('There was an error getting the profile: ' + err.message);
-        }
+  retrieveProfile(lock);
+}
 
-        show_profile_info(profile);
-      });
-    }
-  };
+const showProfileInfo = (profile) => {
+   $('.nickname').text(profile.nickname);
+   $('.btn-login').hide();
+   $('.avatar').attr('src', profile.picture).show();
+   $('.btn-logout').show();
+}
 
-  var show_profile_info = function(profile) {
-     $('.nickname').text(profile.nickname);
-     $('.btn-login').hide();
-     $('.avatar').attr('src', profile.picture).show();
-     $('.btn-logout').show();
-  };
+const retrieveProfile = (lock) => {
+  var id_token = localStorage.getItem('id_token');
+  if (id_token) {
+    lock.getProfile(id_token, function (err, profile) {
+      if (err) {
+        return alert('There was an error getting the profile: ' + err.message);
+      }
 
-  var logout = function() {
-    localStorage.removeItem('id_token');
-    window.location.href = `/polls/?id=${id}`;
-  };
+      showProfileInfo(profile);
+    })
+  }
+}
 
-  retrieve_profile();
+const logout = (id) => {
+  localStorage.removeItem('id_token');
+  window.location.href = `/polls/?id=${id}`;
+}
+
+const setProfileVariables = (profile) => {
+  img = profile.picture
+  nickname = profile.nickname
 }

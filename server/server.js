@@ -3,7 +3,6 @@ const app = express()
 const http = require('http')
 const path = require('path')
 const bodyParser = require('body-parser')
-const shortid = require('shortid')
 require('dotenv').config()
 
 app.use(express.static('public'))
@@ -125,18 +124,6 @@ app.get('/api/options/:id', (req, res) => {
   res.status(200).json(optionsById)
 })
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/screens', 'login.html'));
-})
-
-app.post('/login', (req, res) => {
-  const { profile } = req.body
-  const nickname = profile.nickname
-  const img = profile.picture
-  app.locals.users.push({ nickname, img })
-  res.status(200).json(app.locals.users)
-})
-
 app.get('*', (req, res) => {
   res.send('page not found - try again')
 })
@@ -153,21 +140,35 @@ var socketIo = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
-  console.log('A user has connected', io.engine.clientsCount);
   io.sockets.emit('usersConnected', io.engine.clientsCount)
 
-  socket.on('userVote', (id, name) => {
-    //thing that was clicked on
-    //who clicked on it
-    //send it to everyone
-    const voteId = app.locals.votes.length + 1
-    app.locals.votes.push({ id: voteId, choice_id: id, name, })
-    console.log(app.locals.votes);
-    socket.emit('userMessage', 'You voted!')
-    io.sockets.emit('voteMessage', id, 'Click on by ' + name)
+  socket.on('userVote', (id, img, nickname) => {
+    updateVotes(id, img, nickname)
+
+    socket.emit('userMessage', 'Thanks for your input!')
+    io.sockets.emit('voteMessage', id, img, app.locals.votes)
   })
 
   socket.on('disconnect', () => {
-    console.log('A user has disconnected', io.engine.clientsCount);
+    io.sockets.emit('usersConnected', io.engine.clientsCount)
   })
 })
+
+const updateVotes = (id, img, nickname) => {
+  const voteId = app.locals.votes.length + 1
+
+  if(!app.locals.votes.length) {
+    app.locals.votes.push({ id: voteId,
+                            choice_id: id,
+                            img,
+                            nickname
+                          })
+  } else {
+    app.locals.votes = app.locals.votes.map(vote => {
+      if(vote.nickname == nickname) {
+        vote.choice_id = id
+      }
+      return vote
+    })
+  }
+}
