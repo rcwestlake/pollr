@@ -26,6 +26,7 @@ h1 {
 
 h3 {
   font-weight: 800;
+  margin-bottom: 27px;
 }
 
 #tagline {
@@ -64,9 +65,8 @@ input {
 #question {
   background-color: #FFCE3E;
   border: none;
-  border-bottom: 4px solid #D53939;
+  border-bottom: 2px solid #D53939;
   font-size: 20px;
-  margin-top: 27px;
   width: 95%;
 }
 
@@ -82,7 +82,7 @@ input {
   flex-direction: column;
   background-color: #FFCE3E;
   border: none;
-  border-bottom: 4px solid #D53939;
+  border-bottom: 2px solid #D53939;
   font-size: 20px;
   padding: 10px 0px;
   text-align: left;
@@ -96,6 +96,7 @@ input {
   color: #ffffff;
   display: block;
   font-size: 20px;
+  font-weight: bold;
   height: 40px;
   width: 200px;
   margin: 40px auto;

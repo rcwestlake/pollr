@@ -3,34 +3,36 @@
   <head>
     <meta charset="utf-8">
     <title>Pollr</title>
+    <link rel="stylesheet" href="../css/reset.css"></link>
     <link rel="stylesheet" href="../css/poll.css"></link>
   </head>
   <body>
     <header>
-      <h1>poll page</h1>
+      <h1>Pollr</h1>
       <img
         class="avatar"
         alt="Github profile picture of logged in user"
       />
       <span class="nickname"></span>
+      <p id="connection-count"></p>
+      <p id='user-message'></p>
+      <button type="submit" class="btn-login">
+        Log in
+      </button>
+      <button type="submit" class="btn-logout">
+        Log out
+      </button>
     </header>
 
     <section id="poll-container" style="display: none">
-      <p id="connection-count"></p>
-      <p id='user-message'></p>
       <section id="poll-container">
         <h3 id="poll-question"></h3>
-        <section id="poll-options"></section>
+        <p class="instructions">Click an option below to give your vote.</p>
+        <section id="poll-options">
+        </section>
       </section>
       <p class="vote-message"></p>
     </section>
-
-    <button type="submit" class="btn-login">
-      Log in
-    </button>
-    <button type="submit" class="btn-logout">
-      Log out
-    </button>
 
   <script src="https://cdn.auth0.com/js/lock/10.8/lock.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
