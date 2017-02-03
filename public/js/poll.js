@@ -12,6 +12,11 @@ let nickname;
 $(document).ready(function() {
  if(localStorage.getItem('id_token') !== null) {
    pollContainer.css('display', 'block')
+   let profileData = JSON.parse(localStorage.getItem('profile'))
+   img = profileData.picture
+   nickname = profileData.nickname
+   console.log(img);
+   console.log(nickname);
  }
 
  getPollDataFromServer(getParameterByName('id'))
@@ -117,6 +122,7 @@ const doAuth = (response, id) => {
       }
 
       localStorage.setItem('id_token', authResult.idToken);
+      localStorage.setItem('profile', JSON.stringify(profile))
       setProfileVariables(profile)
       pollContainer.css('display', 'block')
 
