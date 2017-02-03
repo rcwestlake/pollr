@@ -107,7 +107,7 @@ const appendOptionsToDom = (options) => {
   }
 
   options.map(option => {
-    pollOptions.append(`<div class='option ${option.id}'>${option.text}</div>`)
+    pollOptions.append(`<div class='option ${option.id}'>${option.text}<br></div>`)
     $(`.${option.id}`).on('click', function() {
       socket.emit('userVote', option.id, img, nickname)
     })
