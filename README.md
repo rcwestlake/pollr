@@ -7,6 +7,9 @@
 * WebSockets
 * Css
 
+##Screenshot
+![pollr](http://g.recordit.co/8twGQgcgVy.gif)
+
 ##Installation and Setup:
 'npm install'
 'npm start'
